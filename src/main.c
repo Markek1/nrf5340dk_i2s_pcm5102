@@ -47,7 +47,7 @@ static const int16_t sine_lookup_table[SINE_TABLE_SIZE] = {
     -35301, -35393, -35468, -35526, -35568, -35593, -35601, -35593, -35568,
     -35526};
 
-#define TONE_FREQUENCY 55.0f
+#define TONE_FREQUENCY 440.0f
 static uint32_t phase_accumulator = 0;
 static const uint32_t phase_step =
     (uint32_t)((TONE_FREQUENCY / SAMPLE_RATE) * SINE_TABLE_SIZE * 65536);
