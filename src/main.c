@@ -56,9 +56,8 @@ static const int16_t sine_lut[SINE_TABLE_SIZE] = {
     -33728, -33968, -34192, -34400, -34591, -34766, -34925, -35067, -35192,
     -35301, -35393, -35468, -35526, -35568, -35593, -35601, -35593, -35568,
     -35526};
-
-#define TONE_FREQUENCY 440.0f
-static uint32_t phase_accumulator = 0;
+#define TONE_HZ 440.0f
+static uint32_t phase_acc;
 static const uint32_t phase_step =
     (uint32_t)((TONE_HZ / SAMPLE_RATE) * SINE_TABLE_SIZE * 65536);
 
@@ -243,8 +242,9 @@ int main(void) {
                    (int)atomic_get(&g_recoveries));
         }
 
-        current_buf = (current_buf + 1) % 2;
+        /* Burn CPU until the next block boundary */
+        next_deadline += block_ms;
+        if (next_deadline < now) next_deadline = now + block_ms;
+        burn_until(next_deadline);
     }
-
-    return 0;
 }
